@@ -47,6 +47,9 @@ public class BuildPropertySourceGenerator : ISourceGenerator
         
         context.AddSource("__BuildProperties.g.cs", sb.ToString());
         
+        // TODO: could use a module initializer that sets a static class OR an IMauiInitializeService on mobile (this could be too late in the process to use though)
+        // [ModuleInitializer]
+        // [SuppressMessage("Usage", "CA2255:The \'ModuleInitializer\' attribute should not be used in libraries")]
         context.AddSource(
             "__BuildPropertiesRegistration.g.cs",
             """
