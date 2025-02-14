@@ -1,0 +1,7 @@
+<Project>
+    <ItemGroup>
+        <CompilerVisibleProperty Include="PublishAot" />
+        <CompilerVisibleProperty Include="UseDotNetNativeToolchain" />
+        <CompilerVisibleProperty Include="PublishTrimmed" />
+    </ItemGroup>
+</Project>
