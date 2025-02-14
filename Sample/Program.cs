@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 var builder = Host.CreateApplicationBuilder();
-builder.Services.AddBuildPropertiesRegistration();
+builder.Services.AddBuildProperties();
 var app = builder.Build();
 
 var props = app.Services.GetRequiredService<IBuildProperties>();

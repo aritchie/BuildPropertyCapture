@@ -59,7 +59,7 @@ public class BuildPropertySourceGenerator : ISourceGenerator
             
             public static class __BuildPropertiesRegistration
             {
-                public static IServiceCollection AddBuildPropertiesRegistration(this IServiceCollection services)
+                public static IServiceCollection AddBuildProperties(this IServiceCollection services)
                 {
                     services.AddSingleton<global::BuildPropertyCapture.IBuildProperties, global::BuildPropertyCapture.__BuildProperties>();
                     return services;
