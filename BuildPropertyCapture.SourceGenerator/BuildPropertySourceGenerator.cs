@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 
@@ -18,6 +19,13 @@ public class BuildPropertySourceGenerator : ISourceGenerator
         if (properties.Count == 0)
             return;
 
+        // we only want to generate code where host setup takes place
+        if (!opts.TryGetValue("build_property.OutputType", out var buildProperty))
+            return;
+
+        if (buildProperty.Equals("Exe", StringComparison.InvariantCultureIgnoreCase))
+            return;
+        
         var sb = new StringBuilder();
         sb
             .AppendLine("using System;")

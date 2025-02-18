@@ -3,5 +3,7 @@
         <CompilerVisibleProperty Include="PublishAot" />
         <CompilerVisibleProperty Include="UseDotNetNativeToolchain" />
         <CompilerVisibleProperty Include="PublishTrimmed" />
+        <CompilerVisibleProperty Include="OutputType" />
+        <CompilerVisibleProperty Include="IsHotRestartBuild" />
     </ItemGroup>
 </Project>
