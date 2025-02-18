@@ -20,10 +20,10 @@ public class BuildPropertySourceGenerator : ISourceGenerator
             return;
 
         // we only want to generate code where host setup takes place
-        if (!opts.TryGetValue("build_property.OutputType", out var buildProperty))
+        if (!opts.TryGetValue("build_property.outputtype", out var outputType))
             return;
 
-        if (buildProperty.Equals("Exe", StringComparison.InvariantCultureIgnoreCase))
+        if (!outputType.Equals("exe", StringComparison.InvariantCultureIgnoreCase))
             return;
         
         var sb = new StringBuilder();
