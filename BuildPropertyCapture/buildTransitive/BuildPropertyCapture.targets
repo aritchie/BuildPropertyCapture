@@ -4,6 +4,7 @@
         <CompilerVisibleProperty Include="UseDotNetNativeToolchain" />
         <CompilerVisibleProperty Include="PublishTrimmed" />
         <CompilerVisibleProperty Include="OutputType" />
+        <CompilerVisibleProperty Include="Configuration" />
         <CompilerVisibleProperty Include="IsHotRestartBuild" />
     </ItemGroup>
 </Project>
