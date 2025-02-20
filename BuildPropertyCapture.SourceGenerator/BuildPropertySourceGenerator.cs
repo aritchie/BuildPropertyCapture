@@ -25,13 +25,15 @@ public class BuildPropertySourceGenerator : ISourceGenerator
 
         if (!outputType.Equals("exe", StringComparison.InvariantCultureIgnoreCase))
             return;
-        
+
+        opts.TryGetValue("build_property.rootnamespace", out var rootNamespace);
+
         var sb = new StringBuilder();
         sb
             .AppendLine("using System;")
             .AppendLine("using System.Collections.Generic;")
             .AppendLine()
-            .AppendLine("namespace BuildPropertyCapture;")
+            .AppendLine($"namespace {rootNamespace};")
             .AppendLine()
             .AppendLine("public class __BuildProperties : global::BuildPropertyCapture.IBuildProperties")
             .AppendLine("{")
@@ -42,9 +44,10 @@ public class BuildPropertySourceGenerator : ISourceGenerator
             if (opts.TryGetValue(property, out var value))
             {
                 var pn = property.Replace("build_property.", "");
+                var ev = value.Replace("\\", "\\\\");
                 sb
                     .Append("\t\t{")
-                    .Append($"\"{pn}\", \"{value}\"")
+                    .Append($"\"{pn}\", \"{ev}\"")
                     .Append("},\r\n");
             }
         }
@@ -58,22 +61,21 @@ public class BuildPropertySourceGenerator : ISourceGenerator
         // TODO: could use a module initializer that sets a static class OR an IMauiInitializeService on mobile (this could be too late in the process to use though)
         // [ModuleInitializer]
         // [SuppressMessage("Usage", "CA2255:The \'ModuleInitializer\' attribute should not be used in libraries")]
-        context.AddSource(
-            "__BuildPropertiesRegistration.g.cs",
-            """
-            using Microsoft.Extensions.DependencyInjection;
-            
-            namespace BuildPropertyCapture;
-            
-            public static class __BuildPropertiesRegistration
-            {
-                public static IServiceCollection AddBuildProperties(this IServiceCollection services)
-                {
-                    services.AddSingleton<global::BuildPropertyCapture.IBuildProperties, global::BuildPropertyCapture.__BuildProperties>();
-                    return services;
-                } 
-            }
-            """
-        );
+        var content = new StringBuilder()
+            .AppendLine("using Microsoft.Extensions.DependencyInjection;")
+            .AppendLine()
+            .AppendLine($"namespace {rootNamespace};")
+            .AppendLine()
+            .AppendLine("public static class __BuildPropertiesRegistration")
+            .AppendLine("{")
+            .AppendLine("\tpublic static IServiceCollection AddBuildProperties(this IServiceCollection services)")
+            .AppendLine("\t{")
+            .AppendLine($"\t\tservices.AddSingleton<global::BuildPropertyCapture.IBuildProperties, global::{rootNamespace}.__BuildProperties>();")
+            .AppendLine("\t\treturn services;")
+            .AppendLine("\t} ")
+            .AppendLine("}")
+            .ToString();
+
+        context.AddSource("__BuildPropertiesRegistration.g.cs", content);
     }
 }
