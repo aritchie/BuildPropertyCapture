@@ -3,13 +3,13 @@
 namespace Sample.Maui;
 
 
-public class MainViewModel(IBuildProperties props)
+public class MainViewModel
 {
-    public List<BuildProp> Props => props
-        .Properties
+    public List<BuildProp> Props => BuildVariables
+        .Items?
         .Select(x => new BuildProp(x.Key, x.Value))
         .OrderBy(x => x.Key)
-        .ToList();
+        .ToList() ?? new List<BuildProp>();
 }
 
 public record BuildProp(string Key, string Value);

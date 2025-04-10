@@ -1,24 +1,14 @@
 ﻿using BuildPropertyCapture;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Sample;
-using System.Reflection;
 
-var builder = Host.CreateApplicationBuilder();
-builder.Services.AddBuildProperties();
-var app = builder.Build();
 
-var props = app.Services.GetRequiredService<IBuildProperties>();
-foreach (var prop in props.Properties)
+if (BuildVariables.Items == null)
 {
-    Console.WriteLine($"{prop.Key} = {prop.Value}");
+    Console.WriteLine("BuildVariables.Items is null");
 }
-
-//Assembly.GetCallingAssembly().GetType("");
-//var type1 = Assembly.GetEntryAssembly().GetType("Thing");
-
-var type = Type.GetType("Thing");
-var members = typeof(Program).GetTypeInfo().DeclaredMembers;
-
-
-app.Run();
+else
+{
+    foreach (var prop in BuildVariables.Items)
+    {
+        Console.WriteLine($"{prop.Key} = {prop.Value}");
+    }
+}

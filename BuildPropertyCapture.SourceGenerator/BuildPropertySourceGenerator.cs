@@ -26,18 +26,20 @@ public class BuildPropertySourceGenerator : ISourceGenerator
         if (!outputType.Equals("exe", StringComparison.InvariantCultureIgnoreCase))
             return;
 
-        opts.TryGetValue("build_property.rootnamespace", out var rootNamespace);
-
         var sb = new StringBuilder();
         sb
             .AppendLine("using System;")
             .AppendLine("using System.Collections.Generic;")
             .AppendLine()
-            .AppendLine($"namespace {rootNamespace};")
+            .AppendLine("namespace BuildPropertyCapture;")
             .AppendLine()
-            .AppendLine("public class __BuildProperties : global::BuildPropertyCapture.IBuildProperties")
+            .AppendLine("[global::System.Runtime.CompilerServices.CompilerGenerated]")
+            .AppendLine("public static class BuildVariableInitializer")
             .AppendLine("{")
-            .AppendLine("\tpublic IReadOnlyDictionary<string, string> Properties { get; } = new Dictionary<string, string> {");
+            .AppendLine("\t[global::System.Runtime.CompilerServices.ModuleInitializer]")
+            .AppendLine("\tpublic static void Initialize()")
+            .AppendLine("\t{")
+            .AppendLine("\t\tglobal::BuildPropertyCapture.BuildVariables.Initialize(new global::System.Collections.Generic.Dictionary<string, string> {");
         
         foreach (var property in properties)
         {
@@ -46,36 +48,17 @@ public class BuildPropertySourceGenerator : ISourceGenerator
                 var pn = property.Replace("build_property.", "");
                 var ev = value.Replace("\\", "\\\\");
                 sb
-                    .Append("\t\t{")
+                    .Append("\t\t\t{")
                     .Append($"\"{pn}\", \"{ev}\"")
                     .Append("},\r\n");
             }
         }
 
         sb
-            .AppendLine("\t};") // close dictionary
+            .AppendLine("\t\t});") // close dictionary
+            .AppendLine("\t}")
             .AppendLine("}");
         
-        context.AddSource("__BuildProperties.g.cs", sb.ToString());
-        
-        // TODO: could use a module initializer that sets a static class OR an IMauiInitializeService on mobile (this could be too late in the process to use though)
-        // [ModuleInitializer]
-        // [SuppressMessage("Usage", "CA2255:The \'ModuleInitializer\' attribute should not be used in libraries")]
-        var content = new StringBuilder()
-            .AppendLine("using Microsoft.Extensions.DependencyInjection;")
-            .AppendLine()
-            .AppendLine($"namespace {rootNamespace};")
-            .AppendLine()
-            .AppendLine("public static class __BuildPropertiesRegistration")
-            .AppendLine("{")
-            .AppendLine("\tpublic static IServiceCollection AddBuildProperties(this IServiceCollection services)")
-            .AppendLine("\t{")
-            .AppendLine($"\t\tservices.AddSingleton<global::BuildPropertyCapture.IBuildProperties, global::{rootNamespace}.__BuildProperties>();")
-            .AppendLine("\t\treturn services;")
-            .AppendLine("\t} ")
-            .AppendLine("}")
-            .ToString();
-
-        context.AddSource("__BuildPropertiesRegistration.g.cs", content);
+        context.AddSource("__BuildVariables.g.cs", sb.ToString());
     }
 }
