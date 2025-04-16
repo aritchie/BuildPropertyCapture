@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{9C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Maui", "Sample.Maui\Sample.Maui.csproj", "{2CA43F77-3B65-4943-9B8E-36CAA2E94079}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildPropertyCapture.Tests", "BuildPropertyCapture.Tests\BuildPropertyCapture.Tests.csproj", "{3CCB06AF-B3DC-4430-9FB9-D9138B5B20B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,11 +40,17 @@ Global
 		{2CA43F77-3B65-4943-9B8E-36CAA2E94079}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CA43F77-3B65-4943-9B8E-36CAA2E94079}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CA43F77-3B65-4943-9B8E-36CAA2E94079}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CCB06AF-B3DC-4430-9FB9-D9138B5B20B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CCB06AF-B3DC-4430-9FB9-D9138B5B20B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CCB06AF-B3DC-4430-9FB9-D9138B5B20B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CCB06AF-B3DC-4430-9FB9-D9138B5B20B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2F8C013F-E0C5-4454-B7F7-A6D4166E529D}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal

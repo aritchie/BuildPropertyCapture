@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 
 namespace BuildPropertyCapture.SourceGenerator;
 
-[Generator]
+
+[Generator(LanguageNames.CSharp)]
 public class BuildPropertySourceGenerator : ISourceGenerator
 {
     public void Initialize(GeneratorInitializationContext context)
@@ -14,20 +16,27 @@ public class BuildPropertySourceGenerator : ISourceGenerator
 
     public void Execute(GeneratorExecutionContext context)
     {
+        // we'll wrap code in ifdef as it is safer than checking all of the various pieces involved here
+        // ((CSharpCompilation)context.Compilation).LanguageVersion == LanguageVersion.CSharp9
+            
         var opts = context.AnalyzerConfigOptions.GlobalOptions;
         var properties = opts.Keys.Where(x => x.StartsWith("build_property.")).ToList();
         if (properties.Count == 0)
             return;
 
+        if (!opts.TryGetValue("build_property.debugpropertycapture", out var debug) && (debug?.Equals("true", StringComparison.InvariantCultureIgnoreCase) ?? false))
+            Debugger.Break();
+        
         // we only want to generate code where host setup takes place
         if (!opts.TryGetValue("build_property.outputtype", out var outputType))
             return;
 
         if (!outputType.Equals("exe", StringComparison.InvariantCultureIgnoreCase))
             return;
-
+        
         var sb = new StringBuilder();
         sb
+            .AppendLine("#if NET7_0_OR_GREATER")
             .AppendLine("using System;")
             .AppendLine("using System.Collections.Generic;")
             .AppendLine()
@@ -45,8 +54,8 @@ public class BuildPropertySourceGenerator : ISourceGenerator
         {
             if (opts.TryGetValue(property, out var value))
             {
-                var pn = property.Replace("build_property.", "");
-                var ev = value.Replace("\\", "\\\\");
+                var pn = EscapeString(property.Replace("build_property.", ""));
+                var ev = EscapeString(value);
                 sb
                     .Append("\t\t\t{")
                     .Append($"\"{pn}\", \"{ev}\"")
@@ -57,8 +66,12 @@ public class BuildPropertySourceGenerator : ISourceGenerator
         sb
             .AppendLine("\t\t});") // close dictionary
             .AppendLine("\t}")
-            .AppendLine("}");
+            .AppendLine("}")
+            .AppendLine("#endif");
         
         context.AddSource("__BuildVariables.g.cs", sb.ToString());
     }
+
+
+    static string EscapeString(string value) => value.Replace("\\", "\\\\");
 }

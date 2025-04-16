@@ -1,0 +1,30 @@
+﻿{
+  Generator: {},
+  GeneratedSources: [
+    {
+      HintName: __BuildVariables.g.cs,
+      Source:
+#if NET7_0_OR_GREATER
+using System;
+using System.Collections.Generic;
+
+namespace BuildPropertyCapture;
+
+[global::System.Runtime.CompilerServices.CompilerGenerated]
+public static class BuildVariableInitializer
+{
+	[global::System.Runtime.CompilerServices.ModuleInitializer]
+	public static void Initialize()
+	{
+		global::BuildPropertyCapture.BuildVariables.Initialize(new global::System.Collections.Generic.Dictionary<string, string> {
+			{"PublishAot", "false"},
+			{"OutputType", "exe"},
+		});
+	}
+}
+#endif
+
+    }
+  ],
+  Diagnostics: null
+}

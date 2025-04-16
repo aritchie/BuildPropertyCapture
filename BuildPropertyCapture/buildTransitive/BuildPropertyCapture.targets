@@ -6,5 +6,8 @@
         <CompilerVisibleProperty Include="OutputType" />
         <CompilerVisibleProperty Include="Configuration" />
         <CompilerVisibleProperty Include="IsHotRestartBuild" />
+        <CompilerVisibleProperty Include="DebugPropertyCapture" />
+        <CompilerVisibleProperty Include="TargetFramework" />
+        <CompilerVisibleProperty Include="TargetFrameworks" />
     </ItemGroup>
 </Project>

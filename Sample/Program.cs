@@ -1,14 +1,21 @@
 ﻿using BuildPropertyCapture;
 
+namespace Sample;
 
-if (BuildVariables.Items == null)
+public class Program
 {
-    Console.WriteLine("BuildVariables.Items is null");
-}
-else
-{
-    foreach (var prop in BuildVariables.Items)
+    static void Main()
     {
-        Console.WriteLine($"{prop.Key} = {prop.Value}");
+        if (BuildVariables.Items == null)
+        {
+            Console.WriteLine("BuildVariables.Items is null");
+        }
+        else
+        {
+            foreach (var prop in BuildVariables.Items)
+            {
+                Console.WriteLine($"{prop.Key} = {prop.Value}");
+            }
+        }
     }
 }
