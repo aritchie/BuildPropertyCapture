@@ -84,7 +84,7 @@ public class BuildPropertySourceGeneratorTests
     }
 }
 
-public class MockAnalyzerConfigOptionsProvider(Dictionary<string, string> buildProperties) : AnalyzerConfigOptionsProvider
+file class MockAnalyzerConfigOptionsProvider(Dictionary<string, string> buildProperties) : AnalyzerConfigOptionsProvider
 {
     readonly MockAnalyzerConfigOptions options = new (buildProperties);
 
@@ -93,7 +93,7 @@ public class MockAnalyzerConfigOptionsProvider(Dictionary<string, string> buildP
     public override AnalyzerConfigOptions GlobalOptions => this.options;
 }
 
-public class MockAnalyzerConfigOptions(Dictionary<string, string> values) : AnalyzerConfigOptions
+file class MockAnalyzerConfigOptions(Dictionary<string, string> values) : AnalyzerConfigOptions
 {
     public override bool TryGetValue(string key, [NotNullWhen(true)] out string? value)
         => values.TryGetValue(key, out value);
